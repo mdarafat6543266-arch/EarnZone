@@ -1,0 +1,624 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bangla Task Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; }
+        body { background-color: #f7f7fc; color: #333; padding-bottom: 75px; }
+
+        /* Header Banner */
+        .header-card {
+            background: linear-gradient(135deg, #7b1fa2, #e91e63, #ff5722);
+            color: #fff; padding: 25px 20px; border-bottom-left-radius: 24px;
+            border-bottom-right-radius: 24px; position: relative;
+        }
+        .user-avatar {
+            position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,0.25);
+            width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center;
+            justify-content: center; font-weight: bold; font-size: 16px; border: 1px solid rgba(255,255,255,0.4);
+        }
+        .sub-text { font-size: 12px; opacity: 0.9; }
+        .balance-amount { font-size: 34px; font-weight: bold; margin: 4px 0; }
+        .total-earned-text { font-size: 12px; opacity: 0.85; }
+
+        .container { padding: 16px; }
+        .page { display: none; }
+        .page.active { display: block; }
+
+        /* Quick Action Grid */
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+        .card-btn {
+            background: #fff; border-radius: 16px; padding: 15px; display: flex;
+            align-items: center; gap: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); cursor: pointer;
+        }
+        .icon-box {
+            width: 40px; height: 40px; border-radius: 12px; display: flex;
+            align-items: center; justify-content: center; color: #fff; font-size: 18px;
+        }
+        .bg-purple { background: #8e24aa; } .bg-coral { background: #ff5722; }
+
+        /* Progress Card Header */
+        .progress-card {
+            background: linear-gradient(135deg, #7b1fa2, #e91e63); color: #fff;
+            border-radius: 18px; padding: 18px; margin-bottom: 16px; box-shadow: 0 4px 15px rgba(123, 31, 162, 0.2);
+        }
+        .progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .progress-bar-bg { background: rgba(255,255,255,0.3); height: 8px; border-radius: 10px; overflow: hidden; margin-bottom: 8px; }
+        .progress-bar-fill { background: #fff; height: 100%; width: 0%; transition: width 0.3s; }
+        .progress-footer { display: flex; justify-content: space-between; font-size: 12px; opacity: 0.9; }
+
+        /* Stats Cards */
+        .stat-card { background: #fff; border-radius: 16px; padding: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+        .stat-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; }
+        .stat-num { font-size: 22px; font-weight: bold; margin-bottom: 2px; }
+        .stat-label { font-size: 12px; color: #777; }
+
+        /* Video Watch Box */
+        .video-box {
+            background: #fff; border-radius: 16px; padding: 20px; text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03); margin-bottom: 16px;
+        }
+        .btn-watch {
+            background: linear-gradient(135deg, #ab47bc, #ce93d8); color: #fff; border: none;
+            width: 100%; padding: 12px; border-radius: 25px; font-size: 16px; font-weight: bold;
+            cursor: pointer; margin-top: 12px; box-shadow: 0 4px 10px rgba(171, 71, 188, 0.3);
+        }
+
+        /* Task Cards */
+        .task-card {
+            background: #fff; border-radius: 16px; padding: 14px 16px; margin-bottom: 12px;
+            display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+        }
+        .task-left { display: flex; align-items: center; gap: 12px; }
+        .task-icon-circle { width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+        .btn-join {
+            background: #f3e5f5; color: #7b1fa2; border: none; padding: 8px 18px;
+            border-radius: 20px; font-weight: bold; cursor: pointer; text-decoration: none; font-size: 13px;
+        }
+
+        /* Profile Menu List Style */
+        .menu-item {
+            background: #fff; border-radius: 12px; padding: 15px; margin-bottom: 10px;
+            display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+            cursor: pointer; text-decoration: none; color: #333;
+        }
+        .menu-left { display: flex; align-items: center; gap: 12px; font-size: 15px; font-weight: 500; }
+        .menu-left i { font-size: 18px; color: #7b1fa2; width: 25px; text-align: center; }
+
+        /* Bottom Nav */
+        .nav-bar {
+            position: fixed; bottom: 0; width: 100%; background: #fff; display: flex;
+            justify-content: space-around; padding: 10px 0; border-top: 1px solid #eee; box-shadow: -2px 10px rgba(0,0,0,0.04);
+            z-index: 100;
+        }
+        .nav-item { text-align: center; color: #888; font-size: 11px; cursor: pointer; flex: 1; }
+        .nav-item i { font-size: 18px; display: block; margin-bottom: 2px; }
+        .nav-item.active { color: #7b1fa2; font-weight: bold; }
+
+        input, select { width: 100%; padding: 12px; margin: 6px 0 12px; border: 1px solid #ddd; border-radius: 10px; }
+        .btn-submit { width: 100%; background: linear-gradient(135deg, #7b1fa2, #e91e63); color: #fff; border: none; padding: 12px; border-radius: 25px; font-size: 16px; font-weight: bold; cursor: pointer; }
+
+        /* Phone Input Flex */
+        .phone-group { display: flex; gap: 8px; align-items: center; }
+        .phone-group select { flex: 1.2; margin: 6px 0 12px; }
+        .phone-group input { flex: 2.8; }
+
+        /* Password Rules List */
+        .pass-rules { font-size: 11px; margin-bottom: 12px; background: #fdfdfd; padding: 8px; border-radius: 8px; border: 1px solid #eee; }
+        .pass-rules div { margin-bottom: 3px; }
+
+        /* Modal Overlay */
+        .modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); z-index: 200; justify-content: center; align-items: center; padding: 20px; overflow-y: auto;
+        }
+        .modal-content { background: #fff; width: 100%; max-width: 400px; padding: 25px; border-radius: 20px; position: relative; max-height: 90vh; overflow-y: auto; }
+    </style>
+</head>
+<body>
+
+    <!-- Header Banner -->
+    <div class="header-card">
+        <div class="user-avatar" id="avatar-initial">G</div>
+        <div class="sub-text" id="welcome-text">Welcome, Guest 👋</div>
+        <h2 style="font-size: 18px; font-weight: 600;" id="profile-name">Not Logged In</h2>
+        <div class="sub-text" style="margin-top: 10px;">TOTAL BALANCE</div>
+        <div class="balance-amount">৳ <span id="balance">0.00</span></div>
+        <div class="total-earned-text">📈 Total earned: ৳ <span id="total-earned">0.00</span></div>
+    </div>
+
+    <div class="container">
+
+        <!-- 1. HOME PAGE -->
+        <div id="home" class="page active">
+            <div class="grid-2">
+                <div class="card-btn" onclick="switchTab('withdraw')">
+                    <div class="icon-box bg-purple"><i class="fas fa-wallet"></i></div>
+                    <div>
+                        <h4 style="font-size: 14px;">Withdraw</h4>
+                        <span style="font-size: 11px; color:#888;">Cash out</span>
+                    </div>
+                </div>
+                <div class="card-btn" onclick="switchTab('refer')">
+                    <div class="icon-box bg-coral"><i class="fas fa-user-plus"></i></div>
+                    <div>
+                        <h4 style="font-size: 14px;">Refer</h4>
+                        <span style="font-size: 11px; color:#888;">৳ 50.00 / friend</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Daily Tasks Progress -->
+            <div class="progress-card">
+                <div class="progress-header">
+                    <div>
+                        <h4 style="font-size: 15px;">Daily Tasks</h4>
+                        <p style="font-size: 12px; opacity: 0.9;" id="progress-status">🎉 0 of 10 Completed</p>
+                    </div>
+                    <button style="background: rgba(255,255,255,0.2); color: #fff; border: none; padding: 6px 14px; border-radius: 20px; font-size: 12px; cursor: pointer;" onclick="switchTab('earn')">View &rarr;</button>
+                </div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" id="progress-fill" style="width: 0%;"></div>
+                </div>
+                <div class="progress-footer">
+                    <span id="completed-count">0 completed</span>
+                    <span id="completed-percent">0%</span>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #f3e5f5; color: #7b1fa2;"><i class="fas fa-user-friends"></i></div>
+                    <div class="stat-num" id="total-referrals">0</div>
+                    <div class="stat-label">Total Referrals</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #fce4ec; color: #e91e63;"><i class="fas fa-trophy"></i></div>
+                    <div class="stat-num">৳ <span id="stat-total-earned">0.00</span></div>
+                    <div class="stat-label">Total Earned</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. EARN PAGE -->
+        <div id="earn" class="page">
+            <div class="video-box">
+                <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: bold; margin-bottom: 8px;">
+                    <span>Daily Video Ads</span>
+                    <span style="color: #7b1fa2;">Today's reward: ৳ 10.00 / ad</span>
+                </div>
+                <p style="font-size: 12px; color: #666; margin-bottom: 10px;">Daily Progress: <b id="video-count">0/10 watched</b></p>
+                <button class="btn-watch" onclick="watchVideoAd()"><i class="fas fa-play-circle"></i> Watch Video</button>
+            </div>
+
+            <h3 style="margin: 15px 0 10px; font-size: 15px;">Social Tasks</h3>
+            <div class="task-card">
+                <div class="task-left">
+                    <div class="task-icon-circle" style="background: #e1f5fe; color: #0088cc;"><i class="fab fa-telegram-plane"></i></div>
+                    <div>
+                        <h4 style="font-size: 14px;">পেমেন্ট প্রুফ চ্যানেল</h4>
+                        <span style="background: #f06292; color: #fff; font-size: 10px; padding: 2px 6px; border-radius: 8px;">+৳ 20.00</span>
+                    </div>
+                </div>
+                <button class="btn-join" onclick="completeTask('https://t.me/your_telegram', 20)">Join <i class="fas fa-external-link-alt"></i></button>
+            </div>
+        </div>
+
+        <!-- 3. REFER PAGE -->
+        <div id="refer" class="page">
+            <div style="background: #fff; border-radius: 16px; padding: 20px; text-align: center;">
+                <i class="fas fa-users" style="font-size: 40px; color: #7b1fa2; margin-bottom: 10px;"></i>
+                <h3>Invite & Earn</h3>
+                <p style="font-size: 12px; color: #666; margin: 8px 0 15px;">Get ৳ 50.00 for every friend who joins</p>
+                <input type="text" id="ref-link" value="Please login first" readonly>
+                <button class="btn-submit" onclick="alert('Link Copied!')">Copy Link</button>
+            </div>
+        </div>
+
+        <!-- 4. WITHDRAW PAGE -->
+        <div id="withdraw" class="page">
+            <div style="background: #fff; border-radius: 16px; padding: 20px;">
+                <h3>Request Payout</h3>
+                <p style="font-size: 12px; color: #888; margin-bottom: 15px;">টাকা আপনার রেজিস্টার্ড নম্বরে পাঠানো হবে।</p>
+                
+                <label style="font-size: 12px; font-weight: bold;">পেমেন্ট মেথড সিলেক্ট করুন</label>
+                <select id="withdrawMethod">
+                    <option value="bKash">bKash</option>
+                    <option value="Nagad">Nagad</option>
+                </select>
+
+                <label style="font-size: 12px; font-weight: bold;">উইথড্র অ্যামাউন্ট (৳)</label>
+                <input type="number" id="withdrawAmount" placeholder="1020">
+                
+                <label style="font-size: 12px; font-weight: bold;">অ্যাকাউন্ট পাসওয়ার্ড</label>
+                <input type="password" id="withdrawPassword" placeholder="আপনার পাসওয়ার্ড দিন">
+                
+                <button class="btn-submit" onclick="requestWithdraw()">Request Payout</button>
+            </div>
+        </div>
+
+        <!-- 5. PROFILE PAGE -->
+        <div id="profile" class="page">
+            <!-- Account Info or Login Trigger Box -->
+            <div style="background: #fff; border-radius: 16px; padding: 20px; margin-bottom: 12px; text-align: center;" id="profile-container-box">
+                <!-- If Not Logged In -->
+                <div id="logged-out-view">
+                    <i class="fas fa-user-circle" style="font-size: 50px; color: #7b1fa2; margin-bottom: 8px;"></i>
+                    <h3 style="font-size: 16px; margin-bottom: 5px;">আপনি লগইন করেননি</h3>
+                    <p style="font-size: 12px; color: #777; margin-bottom: 12px;">কাজ শুরু করতে এবং পেমেন্ট নিতে অ্যাকাউন্ট তৈরি বা লগইন করুন।</p>
+                    <button class="btn-submit" style="padding: 10px; font-size: 14px;" onclick="openLoginModal()">Login / Register</button>
+                </div>
+                <!-- If Logged In -->
+                <div id="logged-in-view" style="display: none;">
+                    <h3 style="color: #7b1fa2;" id="profile-display-name">User Name</h3>
+                    <p style="font-size: 12px; color: #777;" id="profile-display-email">email@gmail.com</p>
+                    <p style="font-size: 12px; color: #777;" id="profile-display-number">Number: --</p>
+                    <span style="display:inline-block; margin-top:8px; font-size:11px; background:#e8f5e9; color:#2e7d32; padding:3px 10px; border-radius:10px; font-weight:bold;">Active Account</span>
+                    <br><br>
+                    <button style="background: #ff5252; color: #fff; border: none; padding: 6px 15px; border-radius: 15px; font-size: 12px; cursor: pointer;" onclick="logoutUser()">Logout</button>
+                </div>
+            </div>
+
+            <div class="menu-item" onclick="openLanguageModal()">
+                <div class="menu-left"><i class="fas fa-globe"></i> Language (ভাষা)</div>
+                <i class="fas fa-chevron-right" style="color: #aaa; font-size: 12px;"></i>
+            </div>
+
+            <div class="menu-item" onclick="openSettingsModal()">
+                <div class="menu-left"><i class="fas fa-cog"></i> Settings</div>
+                <i class="fas fa-chevron-right" style="color: #aaa; font-size: 12px;"></i>
+            </div>
+
+            <a href="https://t.me/your_support_telegram" target="_blank" class="menu-item">
+                <div class="menu-left"><i class="fas fa-headset"></i> Help Center (Telegram Support)</div>
+                <i class="fas fa-chevron-right" style="color: #aaa; font-size: 12px;"></i>
+            </a>
+        </div>
+
+    </div>
+
+    <!-- 1. LOGIN MODAL -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <h3 style="margin-bottom: 15px;">Login to Your Account</h3>
+            
+            <label style="font-size: 12px; font-weight: bold;">আপনার জিমেইল (Gmail)</label>
+            <input type="email" id="loginEmail" placeholder="example@gmail.com">
+
+            <label style="font-size: 12px; font-weight: bold;">পাসওয়ার্ড</label>
+            <input type="password" id="loginPass" placeholder="আপনার পাসওয়ার্ড দিন">
+
+            <button class="btn-submit" onclick="loginAccount()">Login</button>
+            <p style="text-align: center; font-size: 12px; color: #7b1fa2; margin-top: 15px; cursor: pointer; font-weight: bold;" onclick="switchToRegister()">নতুন অ্যাকাউন্ট তৈরি করতে চান? রেজিস্টার করুন</p>
+            <p style="text-align: center; font-size: 12px; color: #888; margin-top: 10px; cursor: pointer;" onclick="closeLoginModal()">Cancel</p>
+        </div>
+    </div>
+
+    <!-- 2. REGISTER MODAL -->
+    <div class="modal" id="registerModal">
+        <div class="modal-content">
+            <h3 style="margin-bottom: 15px;">Create New Account</h3>
+            
+            <label style="font-size: 12px; font-weight: bold;">আপনার জিমেইল (Gmail)</label>
+            <input type="email" id="regEmail" placeholder="example@gmail.com">
+
+            <label style="font-size: 12px; font-weight: bold;">কান্ট্রি ও বিকাশ/নগদ নম্বর</label>
+            <div class="phone-group">
+                <select id="countrySelect">
+                    <option value="+880" selected>🇧🇩 +880 (Bangladesh)</option>
+                    <option value="+91">🇮🇳 +91 (India)</option>
+                    <option value="+1">🇺🇸 +1 (USA)</option>
+                    <option value="+44">🇬🇧 +44 (UK)</option>
+                    <option value="+966">🇸🇦 +966 (Saudi Arabia)</option>
+                </select>
+                <input type="number" id="regPhone" placeholder="1XXXXXXXXX (10 digits)">
+            </div>
+
+            <label style="font-size: 12px; font-weight: bold;">পাসওয়ার্ড দিন</label>
+            <input type="password" id="regPass" placeholder="Hard Password" oninput="checkPasswordRules()">
+
+            <!-- Live Password Rules Indicator -->
+            <div class="pass-rules">
+                <div id="rule-len">❌ কমপক্ষে ৮ অক্ষরের হতে হবে</div>
+                <div id="rule-upper">❌ কমপক্ষে একটি বড় হাতের অক্ষর (A-Z)</div>
+                <div id="rule-lower">❌ কমপক্ষে একটি ছোট হাতের অক্ষর (a-z)</div>
+                <div id="rule-num">❌ কমপক্ষে একটি সংখ্যা (0-9)</div>
+                <div id="rule-special">❌ কমপক্ষে একটি স্পেশাল ক্যারেক্টার (@#$%)</div>
+            </div>
+
+            <label style="font-size: 12px; font-weight: bold;">পাসওয়ার্ড কনফার্ম করুন</label>
+            <input type="password" id="regConfirmPass" placeholder="Re-enter Password">
+
+            <button class="btn-submit" onclick="registerAccount()">Register Account</button>
+            <p style="text-align: center; font-size: 12px; color: #7b1fa2; margin-top: 10px; cursor: pointer; font-weight: bold;" onclick="switchToLogin()">আগে থেকেই অ্যাকাউন্ট আছে? লগইন করুন</p>
+        </div>
+    </div>
+
+    <!-- LANGUAGE MODAL -->
+    <div class="modal" id="langModal">
+        <div class="modal-content">
+            <h3 style="margin-bottom: 15px;">Select Language</h3>
+            <div class="menu-item" onclick="setLanguage('বাংলা')"><div class="menu-left">🇧🇩 বাংলা (Bangla)</div></div>
+            <div class="menu-item" onclick="setLanguage('English')"><div class="menu-left">🇬🇧 English</div></div>
+            <p style="text-align: center; font-size: 12px; color: #888; margin-top: 10px; cursor: pointer;" onclick="closeLanguageModal()">Close</p>
+        </div>
+    </div>
+
+    <!-- SETTINGS MODAL -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
+            <h3 style="margin-bottom: 15px;">App Settings</h3>
+            <p style="font-size: 13px; margin-bottom: 10px; color: #555;">Notifications: Enabled</p>
+            <p style="font-size: 13px; margin-bottom: 15px; color: #555;">App Version: v2.3.0</p>
+            <button class="btn-submit" onclick="closeSettingsModal()">Save & Close</button>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="nav-bar">
+        <div class="nav-item active" onclick="switchTab('home')"><i class="fas fa-home"></i>Home</div>
+        <div class="nav-item" onclick="switchTab('earn')"><i class="fas fa-tasks"></i>Earn</div>
+        <div class="nav-item" onclick="switchTab('refer')"><i class="fas fa-user-friends"></i>Refer</div>
+        <div class="nav-item" onclick="switchTab('withdraw')"><i class="fas fa-wallet"></i>Withdraw</div>
+        <div class="nav-item" onclick="switchTab('profile')"><i class="fas fa-user"></i>Profile</div>
+    </div>
+
+    <!-- JavaScript Logics -->
+    <script>
+        let isRegistered = false;
+        let balance = 0.00;
+        let totalEarned = 0.00;
+        let completedTasks = 0;
+        let totalLimit = 10;
+        
+        let savedAccount = {
+            email: "",
+            phone: "",
+            password: ""
+        };
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            const navIndex = ['home', 'earn', 'refer', 'withdraw', 'profile'].indexOf(tabId);
+            if(navIndex !== -1) {
+                document.querySelectorAll('.nav-item')[navIndex].classList.add('active');
+            }
+        }
+
+        function checkAuthAndSwitch(tabId) {
+            if (!isRegistered) {
+                alert("দয়া করে প্রথমে প্রোফাইল সেকশন থেকে লগইন বা অ্যাকাউন্ট তৈরি করুন!");
+                switchTab('profile');
+                return;
+            }
+            switchTab(tabId);
+        }
+
+        // Modal Open/Close Controls
+        function openLoginModal() { document.getElementById('loginModal').style.display = 'flex'; }
+        function closeLoginModal() { document.getElementById('loginModal').style.display = 'none'; }
+        function switchToRegister() {
+            document.getElementById('loginModal').style.display = 'none';
+            document.getElementById('registerModal').style.display = 'flex';
+        }
+        function switchToLogin() {
+            document.getElementById('registerModal').style.display = 'none';
+            document.getElementById('loginModal').style.display = 'flex';
+        }
+
+        // Live Password Checking Rules
+        function checkPasswordRules() {
+            let p = document.getElementById('regPass').value;
+            
+            let hasLen = p.length >= 8;
+            let hasUpper = /[A-Z]/.test(p);
+            let hasLower = /[a-z]/.test(p);
+            let hasNum = /[0-9]/.test(p);
+            let hasSpecial = /[\@\#\$\%]/.test(p);
+
+            document.getElementById('rule-len').innerHTML = (hasLen ? "✔️" : "❌") + " কমপক্ষে ৮ অক্ষরের হতে হবে";
+            document.getElementById('rule-upper').innerHTML = (hasUpper ? "✔️" : "❌") + " কমপক্ষে একটি বড় হাতের অক্ষর (A-Z)";
+            document.getElementById('rule-lower').innerHTML = (hasLower ? "✔️" : "❌") + " কমপক্ষে একটি ছোট হাতের অক্ষর (a-z)";
+            document.getElementById('rule-num').innerHTML = (hasNum ? "✔️" : "❌") + " কমপক্ষে একটি সংখ্যা (0-9)";
+            document.getElementById('rule-special').innerHTML = (hasSpecial ? "✔️" : "❌") + " কমপক্ষে একটি স্পেশাল ক্যারেক্টার (@#$%)";
+        }
+
+        // Register Account
+        function registerAccount() {
+            let email = document.getElementById('regEmail').value;
+            let country = document.getElementById('countrySelect').value;
+            let phone = document.getElementById('regPhone').value;
+            let pass = document.getElementById('regPass').value;
+            let confirmPass = document.getElementById('regConfirmPass').value;
+
+            if(email === "" || phone === "" || pass === "" || confirmPass === "") {
+                alert("সবগুলো ঘর পূরণ করা বাধ্যতামূলক!");
+                return;
+            }
+
+            if(phone.length !== 10) {
+                alert("কান্ট্রি কোডের পরের অংশটি সঠিক ১০ ডিজিটের দিন!");
+                return;
+            }
+
+            let hasLen = pass.length >= 8;
+            let hasUpper = /[A-Z]/.test(pass);
+            let hasLower = /[a-z]/.test(pass);
+            let hasNum = /[0-9]/.test(pass);
+            let hasSpecial = /[\@\#\$\%]/.test(pass);
+
+            if(!hasLen || !hasUpper || !hasLower || !hasNum || !hasSpecial) {
+                alert("পাসওয়ার্ডটি নিরাপদ নয়! নিচের শর্তগুলো ভালোভাবে পূরণ করুন।");
+                return;
+            }
+
+            if(pass !== confirmPass) {
+                alert("দুটি পাসওয়ার্ড একরকম হয়নি!");
+                return;
+            }
+
+            savedAccount.email = email;
+            savedAccount.phone = country + phone;
+            savedAccount.password = pass;
+
+            alert("রেজিস্ট্রেশন সফল হয়েছে! এখন লগইন করুন।");
+            switchToLogin();
+        }
+
+        // Login Account
+        function loginAccount() {
+            let email = document.getElementById('loginEmail').value;
+            let pass = document.getElementById('loginPass').value;
+
+            if(savedAccount.email === "" || savedAccount.password === "") {
+                alert("কোনো অ্যাকাউন্ট রেজিস্টার্ড করা নেই! আগে রেজিস্টার করুন।");
+                return;
+            }
+
+            if(email === savedAccount.email && pass === savedAccount.password) {
+                isRegistered = true;
+                closeLoginModal();
+
+                let username = email.split('@')[0];
+                document.getElementById('profile-name').innerText = username;
+                document.getElementById('welcome-text').innerText = "Welcome, " + username + " 👋";
+                document.getElementById('profile-display-name').innerText = username;
+                document.getElementById('profile-display-email').innerText = email;
+                document.getElementById('profile-display-number').innerText = "Number: " + savedAccount.phone;
+                document.getElementById('avatar-initial').innerText = username.charAt(0).toUpperCase();
+                document.getElementById('ref-link').value = "https://t.me/your_bot?start=" + savedAccount.phone;
+
+                // Toggle Profile views
+                document.getElementById('logged-out-view').style.display = 'none';
+                document.getElementById('logged-in-view').style.display = 'block';
+
+                alert("লগইন সফল হয়েছে!");
+            } else {
+                alert("ভুল জিমেইল অথবা পাসওয়ার্ড দিয়েছেন!");
+            }
+        }
+
+        function logoutUser() {
+            isRegistered = false;
+            balance = 0.00;
+            totalEarned = 0.00;
+            completedTasks = 0;
+            updateUI();
+            
+            document.getElementById('profile-name').innerText = "Not Logged In";
+            document.getElementById('welcome-text').innerText = "Welcome, Guest 👋";
+            document.getElementById('avatar-initial').innerText = "G";
+            
+            document.getElementById('logged-in-view').style.display = 'none';
+            document.getElementById('logged-out-view').style.display = 'block';
+            
+            switchTab('home');
+            alert("লগআউট সফল হয়েছে।");
+        }
+
+        // Withdraw logic
+        function requestWithdraw() {
+            if(!isRegistered) {
+                alert("দয়া করে আগে প্রোফাইল থেকে লগইন করুন!");
+                switchTab('profile');
+                return;
+            }
+
+            let method = document.getElementById('withdrawMethod').value;
+            let amount = parseFloat(document.getElementById('withdrawAmount').value);
+            let pass = document.getElementById('withdrawPassword').value;
+
+            if(isNaN(amount) || amount <= 0) {
+                alert("দয়া করে সঠিক উইথড্র অ্যামাউন্ট দিন!");
+                return;
+            }
+
+            if(amount > balance) {
+                alert("আপনার অ্যাকাউন্টে পর্যাপ্ত ব্যালেন্স নেই!");
+                return;
+            }
+
+            if(pass !== savedAccount.password) {
+                alert("পাসওয়ার্ড ভুল হয়েছে!");
+                return;
+            }
+
+            balance -= amount;
+            updateUI();
+            document.getElementById('withdrawAmount').value = "";
+            document.getElementById('withdrawPassword').value = "";
+            alert("সফল! আপনার " + method + " (" + savedAccount.phone + ") নম্বরে টাকা পাঠানো হচ্ছে।");
+        }
+
+        function openLanguageModal() { document.getElementById('langModal').style.display = 'flex'; }
+        function closeLanguageModal() { document.getElementById('langModal').style.display = 'none'; }
+        function setLanguage(lang) { alert("Language changed to: " + lang); closeLanguageModal(); }
+
+        function openSettingsModal() { document.getElementById('settingsModal').style.display = 'flex'; }
+        function closeSettingsModal() { document.getElementById('settingsModal').style.display = 'none'; }
+
+        function updateUI() {
+            document.getElementById('balance').innerText = balance.toFixed(2);
+            document.getElementById('total-earned').innerText = totalEarned.toFixed(2);
+            document.getElementById('stat-total-earned').innerText = totalEarned.toFixed(2);
+            
+            let percent = Math.round((completedTasks / totalLimit) * 100);
+            document.getElementById('progress-fill').style.width = percent + '%';
+            document.getElementById('completed-count').innerText = completedTasks + ' completed';
+            document.getElementById('completed-percent').innerText = percent + '%';
+            document.getElementById('progress-status').innerText = '🎉 ' + completedTasks + ' of ' + totalLimit + ' Completed';
+            document.getElementById('video-count').innerText = completedTasks + '/' + totalLimit + ' watched';
+        }
+
+        function watchVideoAd() {
+            if(!isRegistered) { 
+                alert("টাস্ক সম্পন্ন করতে এবং ইনকাম জমা করতে আগে প্রোফাইল থেকে লগইন করুন!"); 
+                switchTab('profile'); 
+                return; 
+            }
+            if(completedTasks >= totalLimit) { alert("আজকের টাস্ক লিমিট শেষ!"); return; }
+            completedTasks++;
+            balance += 10.00;
+            totalEarned += 10.00;
+            updateUI();
+            alert("ভিডিও দেখার জন্য ৳১০ যোগ হয়েছে!");
+        }
+
+        function completeTask(url, reward) {
+            if(!isRegistered) { 
+                alert("টাস্ক সম্পন্ন করতে এবং ইনকাম জমা করতে আগে প্রোফাইল থেকে লগইন করুন!"); 
+                switchTab('profile'); 
+                return; 
+            }
+            window.open(url, '_blank');
+            if(completedTasks < totalLimit) completedTasks++;
+            balance += reward;
+            totalEarned += reward;
+            updateUI();
+        }
+    </scri>pt>
+
+    <!-- Firebase Integration -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-analytics.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyArMCg3_R_6Edy9c9uSPOYGLv7aXjGEBmk",
+            authDomain: "earnzone-ce3f1.firebaseapp.com",
+            projectId: "earnzone-ce3f1",
+            storageBucket: "earnzone-ce3f1.firebasestorage.app",
+            messagingSenderId: "722733804671",
+            appId: "1:722733804671:web:fda1620d42d00c19ae634a",
+            measurementId: "G-YMPZZ06ZJV"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+    </script>
+</body>
+</html
