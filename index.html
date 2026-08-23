@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; }
-        body { background-color: #f7f7fc; color: #333; padding-bottom: 75px; }
+        body { background-color: #f7f7fc; color: #333; padding-bottom: 80px; -webkit-tap-highlight-color: transparent; }
 
         .header-card {
             background: linear-gradient(135deg, #7b1fa2, #e91e63, #ff5722);
@@ -25,7 +25,7 @@
 
         .container { padding: 16px; }
         .page { display: none; }
-        .page.active { display: block; }
+        .page.active { display: block !important; }
 
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
         .card-btn {
@@ -82,15 +82,15 @@
         .menu-left i { font-size: 18px; color: #7b1fa2; width: 25px; text-align: center; }
 
         .nav-bar {
-            position: fixed; bottom: 0; width: 100%; background: #fff; display: flex;
-            justify-content: space-around; padding: 10px 0; border-top: 1px solid #eee; box-shadow: -2px 10px rgba(0,0,0,0.04);
+            position: fixed; bottom: 0; left: 0; width: 100%; background: #fff; display: flex;
+            justify-content: space-around; padding: 10px 0; border-top: 1px solid #eee; box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
             z-index: 100;
         }
         .nav-item { text-align: center; color: #888; font-size: 11px; cursor: pointer; flex: 1; }
         .nav-item i { font-size: 18px; display: block; margin-bottom: 2px; }
         .nav-item.active { color: #7b1fa2; font-weight: bold; }
 
-        input, select { width: 100%; padding: 12px; margin: 6px 0 12px; border: 1px solid #ddd; border-radius: 10px; }
+        input, select { width: 100%; padding: 12px; margin: 6px 0 12px; border: 1px solid #ddd; border-radius: 10px; outline: none; }
         .btn-submit { width: 100%; background: linear-gradient(135deg, #7b1fa2, #e91e63); color: #fff; border: none; padding: 12px; border-radius: 25px; font-size: 16px; font-weight: bold; cursor: pointer; }
 
         .phone-group { display: flex; gap: 8px; align-items: center; }
@@ -102,7 +102,7 @@
 
         .modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6); z-index: 200; justify-content: center; align-items: center; padding: 20px; overflow-y: auto;
+            background: rgba(0,0,0,0.6); z-index: 200; justify-content: center; align-items: center; padding: 20px;
         }
         .modal-content { background: #fff; width: 100%; max-width: 400px; padding: 25px; border-radius: 20px; position: relative; max-height: 90vh; overflow-y: auto; }
     </style>
@@ -123,14 +123,14 @@
         <!-- HOME PAGE -->
         <div id="home" class="page active">
             <div class="grid-2">
-                <div class="card-btn" onclick="window.switchTab('withdraw')">
+                <div class="card-btn" onclick="switchTab('withdraw')">
                     <div class="icon-box bg-purple"><i class="fas fa-wallet"></i></div>
                     <div>
                         <h4 style="font-size: 14px;">Withdraw</h4>
                         <span style="font-size: 11px; color:#888;">Cash out</span>
                     </div>
                 </div>
-                <div class="card-btn" onclick="window.switchTab('refer')">
+                <div class="card-btn" onclick="switchTab('refer')">
                     <div class="icon-box bg-coral"><i class="fas fa-user-plus"></i></div>
                     <div>
                         <h4 style="font-size: 14px;">Refer</h4>
@@ -145,7 +145,7 @@
                         <h4 style="font-size: 15px;">Daily Tasks</h4>
                         <p style="font-size: 12px; opacity: 0.9;" id="progress-status">🎉 0 of 10 Completed</p>
                     </div>
-                    <button style="background: rgba(255,255,255,0.2); color: #fff; border: none; padding: 6px 14px; border-radius: 20px; font-size: 12px; cursor: pointer;" onclick="window.switchTab('earn')">View &rarr;</button>
+                    <button style="background: rgba(255,255,255,0.2); color: #fff; border: none; padding: 6px 14px; border-radius: 20px; font-size: 12px; cursor: pointer;" onclick="switchTab('earn')">View &rarr;</button>
                 </div>
                 <div class="progress-bar-bg">
                     <div class="progress-bar-fill" id="progress-fill" style="width: 0%;"></div>
@@ -178,7 +178,7 @@
                     <span style="color: #7b1fa2;">Today's reward: ৳ 10.00 / ad</span>
                 </div>
                 <p style="font-size: 12px; color: #666; margin-bottom: 10px;">Daily Progress: <b id="video-count">0/10 watched</b></p>
-                <button class="btn-watch" id="btnWatchVideo" onclick="window.watchVideoAd()"><i class="fas fa-play-circle"></i> Watch Video</button>
+                <button class="btn-watch" id="btnWatchVideo" onclick="watchVideoAd()"><i class="fas fa-play-circle"></i> Watch Video</button>
             </div>
 
             <h3 style="margin: 15px 0 10px; font-size: 15px;">Social Tasks</h3>
@@ -190,7 +190,7 @@
                         <span style="background: #f06292; color: #fff; font-size: 10px; padding: 2px 6px; border-radius: 8px;">+৳ 20.00</span>
                     </div>
                 </div>
-                <button class="btn-join" onclick="window.completeTask('https://t.me/your_telegram', 20)">Join <i class="fas fa-external-link-alt"></i></button>
+                <button class="btn-join" onclick="completeTask('https://t.me/your_telegram', 20)">Join <i class="fas fa-external-link-alt"></i></button>
             </div>
         </div>
 
@@ -201,7 +201,7 @@
                 <h3>Invite & Earn</h3>
                 <p style="font-size: 12px; color: #666; margin: 8px 0 15px;">Get ৳ 50.00 for every friend who joins</p>
                 <input type="text" id="ref-link" value="Please login first" readonly>
-                <button class="btn-submit" onclick="window.copyReferralLink()">Copy Link</button>
+                <button class="btn-submit" onclick="copyReferralLink()">Copy Link</button>
             </div>
         </div>
 
@@ -220,7 +220,7 @@
                 <label style="font-size: 12px; font-weight: bold;">উইথড্র অ্যামাউন্ট (৳)</label>
                 <input type="number" id="withdrawAmount" placeholder="100">
                 
-                <button class="btn-submit" id="btnWithdraw" onclick="window.requestWithdraw()">Request Payout</button>
+                <button class="btn-submit" id="btnWithdraw" onclick="requestWithdraw()">Request Payout</button>
             </div>
         </div>
 
@@ -231,7 +231,7 @@
                     <i class="fas fa-user-circle" style="font-size: 50px; color: #7b1fa2; margin-bottom: 8px;"></i>
                     <h3 style="font-size: 16px; margin-bottom: 5px;">আপনি লগইন করেননি</h3>
                     <p style="font-size: 12px; color: #777; margin-bottom: 12px;">কাজ শুরু করতে এবং পেমেন্ট নিতে অ্যাকাউন্ট তৈরি বা লগইন করুন।</p>
-                    <button class="btn-submit" style="padding: 10px; font-size: 14px;" onclick="window.openLoginModal()">Login / Register</button>
+                    <button class="btn-submit" style="padding: 10px; font-size: 14px;" onclick="openLoginModal()">Login / Register</button>
                 </div>
                 <div id="logged-in-view" style="display: none;">
                     <h3 style="color: #7b1fa2;" id="profile-display-name">User Name</h3>
@@ -239,16 +239,16 @@
                     <p style="font-size: 12px; color: #777;" id="profile-display-number">Number: --</p>
                     <span style="display:inline-block; margin-top:8px; font-size:11px; background:#e8f5e9; color:#2e7d32; padding:3px 10px; border-radius:10px; font-weight:bold;">Active Account</span>
                     <br><br>
-                    <button style="background: #ff5252; color: #fff; border: none; padding: 6px 15px; border-radius: 15px; font-size: 12px; cursor: pointer;" onclick="window.logoutUser()">Logout</button>
+                    <button style="background: #ff5252; color: #fff; border: none; padding: 6px 15px; border-radius: 15px; font-size: 12px; cursor: pointer;" onclick="logoutUser()">Logout</button>
                 </div>
             </div>
 
-            <div class="menu-item" onclick="window.openLanguageModal()">
+            <div class="menu-item" onclick="openLanguageModal()">
                 <div class="menu-left"><i class="fas fa-globe"></i> Language (ভাষা)</div>
                 <i class="fas fa-chevron-right" style="color: #aaa; font-size: 12px;"></i>
             </div>
 
-            <div class="menu-item" onclick="window.openSettingsModal()">
+            <div class="menu-item" onclick="openSettingsModal()">
                 <div class="menu-left"><i class="fas fa-cog"></i> Settings</div>
                 <i class="fas fa-chevron-right" style="color: #aaa; font-size: 12px;"></i>
             </div>
@@ -269,9 +269,9 @@
             <input type="email" id="loginEmail" placeholder="example@gmail.com">
             <label style="font-size: 12px; font-weight: bold;">পাসওয়ার্ড</label>
             <input type="password" id="loginPass" placeholder="আপনার পাসওয়ার্ড দিন">
-            <button class="btn-submit" id="btnLogin" onclick="window.loginAccount()">Login</button>
-            <p style="text-align: center; font-size: 12px; color: #7b1fa2; margin-top: 15px; cursor: pointer; font-weight: bold;" onclick="window.switchToRegister()">নতুন অ্যাকাউন্ট তৈরি করতে চান? রেজিস্টার করুন</p>
-            <p style="text-align: center; font-size: 12px; color: #888; margin-top: 10px; cursor: pointer;" onclick="window.closeLoginModal()">Cancel</p>
+            <button class="btn-submit" id="btnLogin" onclick="loginAccount()">Login</button>
+            <p style="text-align: center; font-size: 12px; color: #7b1fa2; margin-top: 15px; cursor: pointer; font-weight: bold;" onclick="switchToRegister()">নতুন অ্যাকাউন্ট তৈরি করতে চান? রেজিস্টার করুন</p>
+            <p style="text-align: center; font-size: 12px; color: #888; margin-top: 10px; cursor: pointer;" onclick="closeLoginModal()">Cancel</p>
         </div>
     </div>
 
@@ -287,10 +287,10 @@
                     <option value="+91">🇮🇳 +91 (India)</option>
                     <option value="+1">🇺🇸 +1 (USA)</option>
                 </select>
-                <input type="number" id="regPhone" placeholder="1XXXXXXXXX (10 digits)">
+                <input type="number" id="regPhone" placeholder="1XXXXXXXXX">
             </div>
             <label style="font-size: 12px; font-weight: bold;">পাসওয়ার্ড দিন</label>
-            <input type="password" id="regPass" placeholder="Hard Password">
+            <input type="password" id="regPass" placeholder="Password">
 
             <div class="pass-rules">
                 <div id="rule-len">❌ কমপক্ষে ৮ অক্ষরের হতে হবে</div>
@@ -302,17 +302,17 @@
 
             <label style="font-size: 12px; font-weight: bold;">পাসওয়ার্ড কনফার্ম করুন</label>
             <input type="password" id="regConfirmPass" placeholder="Re-enter Password">
-            <button class="btn-submit" id="btnRegister" onclick="window.registerAccount()">Register Account</button>
-            <p style="text-align: center; font-size: 12px; color: #7b1fa2; margin-top: 10px; cursor: pointer; font-weight: bold;" onclick="window.switchToLogin()">আগে থেকেই অ্যাকাউন্ট আছে? লগইন করুন</p>
+            <button class="btn-submit" id="btnRegister" onclick="registerAccount()">Register Account</button>
+            <p style="text-align: center; font-size: 12px; color: #7b1fa2; margin-top: 10px; cursor: pointer; font-weight: bold;" onclick="switchToLogin()">আগে থেকেই অ্যাকাউন্ট আছে? লগইন করুন</p>
         </div>
     </div>
 
     <div class="modal" id="langModal">
         <div class="modal-content">
             <h3 style="margin-bottom: 15px;">Select Language</h3>
-            <div class="menu-item" onclick="window.setLanguage('বাংলা')"><div class="menu-left">🇧🇩 বাংলা (Bangla)</div></div>
-            <div class="menu-item" onclick="window.setLanguage('English')"><div class="menu-left">🇬🇧 English</div></div>
-            <p style="text-align: center; font-size: 12px; color: #888; margin-top: 10px; cursor: pointer;" onclick="window.closeLanguageModal()">Close</p>
+            <div class="menu-item" onclick="setLanguage('বাংলা')"><div class="menu-left">🇧🇩 বাংলা (Bangla)</div></div>
+            <div class="menu-item" onclick="setLanguage('English')"><div class="menu-left">🇬🇧 English</div></div>
+            <p style="text-align: center; font-size: 12px; color: #888; margin-top: 10px; cursor: pointer;" onclick="closeLanguageModal()">Close</p>
         </div>
     </div>
 
@@ -321,18 +321,55 @@
             <h3 style="margin-bottom: 15px;">App Settings</h3>
             <p style="font-size: 13px; margin-bottom: 10px; color: #555;">Notifications: Enabled</p>
             <p style="font-size: 13px; margin-bottom: 15px; color: #555;">App Version: v2.3.0</p>
-            <button class="btn-submit" onclick="window.closeSettingsModal()">Save & Close</button>
+            <button class="btn-submit" onclick="closeSettingsModal()">Save & Close</button>
         </div>
     </div>
 
     <!-- Bottom Navigation -->
     <div class="nav-bar">
-        <div class="nav-item active" onclick="window.switchTab('home')"><i class="fas fa-home"></i>Home</div>
-        <div class="nav-item" onclick="window.switchTab('earn')"><i class="fas fa-tasks"></i>Earn</div>
-        <div class="nav-item" onclick="window.switchTab('refer')"><i class="fas fa-user-friends"></i>Refer</div>
-        <div class="nav-item" onclick="window.switchTab('withdraw')"><i class="fas fa-wallet"></i>Withdraw</div>
-        <div class="nav-item" onclick="window.switchTab('profile')"><i class="fas fa-user"></i>Profile</div>
+        <div class="nav-item active" onclick="switchTab('home')"><i class="fas fa-home"></i>Home</div>
+        <div class="nav-item" onclick="switchTab('earn')"><i class="fas fa-tasks"></i>Earn</div>
+        <div class="nav-item" onclick="switchTab('refer')"><i class="fas fa-user-friends"></i>Refer</div>
+        <div class="nav-item" onclick="switchTab('withdraw')"><i class="fas fa-wallet"></i>Withdraw</div>
+        <div class="nav-item" onclick="switchTab('profile')"><i class="fas fa-user"></i>Profile</div>
     </div>
+
+    <!-- Navigation & UI Functions -->
+    <script>
+        window.switchTab = function(tabId) {
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+            
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => item.classList.remove('active'));
+
+            const targetPage = document.getElementById(tabId);
+            if (targetPage) {
+                targetPage.classList.add('active');
+            }
+
+            const navIndex = ['home', 'earn', 'refer', 'withdraw', 'profile'].indexOf(tabId);
+            if(navIndex !== -1 && navItems[navIndex]) {
+                navItems[navIndex].classList.add('active');
+            }
+        };
+
+        window.openLoginModal = () => document.getElementById('loginModal').style.display = 'flex';
+        window.closeLoginModal = () => document.getElementById('loginModal').style.display = 'none';
+        window.switchToRegister = () => {
+            document.getElementById('loginModal').style.display = 'none';
+            document.getElementById('registerModal').style.display = 'flex';
+        };
+        window.switchToLogin = () => {
+            document.getElementById('registerModal').style.display = 'none';
+            document.getElementById('loginModal').style.display = 'flex';
+        };
+        window.openLanguageModal = () => document.getElementById('langModal').style.display = 'flex';
+        window.closeLanguageModal = () => document.getElementById('langModal').style.display = 'none';
+        window.setLanguage = (l) => { alert("Language: " + l); window.closeLanguageModal(); };
+        window.openSettingsModal = () => document.getElementById('settingsModal').style.display = 'flex';
+        window.closeSettingsModal = () => document.getElementById('settingsModal').style.display = 'none';
+    </script>
 
     <!-- Firebase Integration Logic -->
     <script type="module">
@@ -356,25 +393,6 @@
 
         let currentUser = null;
         let userData = { balance: 0, totalEarned: 0, completedTasks: 0, phone: "" };
-
-        window.switchTab = function(tabId) {
-            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-            const navIndex = ['home', 'earn', 'refer', 'withdraw', 'profile'].indexOf(tabId);
-            if(navIndex !== -1) document.querySelectorAll('.nav-item')[navIndex].classList.add('active');
-        };
-
-        window.openLoginModal = () => document.getElementById('loginModal').style.display = 'flex';
-        window.closeLoginModal = () => document.getElementById('loginModal').style.display = 'none';
-        window.switchToRegister = () => {
-            document.getElementById('loginModal').style.display = 'none';
-            document.getElementById('registerModal').style.display = 'flex';
-        };
-        window.switchToLogin = () => {
-            document.getElementById('registerModal').style.display = 'none';
-            document.getElementById('loginModal').style.display = 'flex';
-        };
 
         document.getElementById('regPass').addEventListener('input', function() {
             let p = this.value;
@@ -540,7 +558,6 @@
 
             userData.balance -= amount;
             
-            // Record Withdraw Request
             const withdrawRef = ref(db, 'withdraws/' + currentUser.uid + '_' + Date.now());
             await set(withdrawRef, {
                 uid: currentUser.uid,
@@ -567,13 +584,6 @@
             navigator.clipboard.writeText(copyText.value);
             alert("Referral Link Copied!");
         };
-
-        window.openLanguageModal = () => document.getElementById('langModal').style.display = 'flex';
-        window.closeLanguageModal = () => document.getElementById('langModal').style.display = 'none';
-        window.setLanguage = (l) => { alert("Language: " + l); window.closeLanguageModal(); };
-
-        window.openSettingsModal = () => document.getElementById('settingsModal').style.display = 'flex';
-        window.closeSettingsModal = () => document.getElementById('settingsModal').style.display = 'none';
     </script>
 </body>
-</html>
+    </html>
